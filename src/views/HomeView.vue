@@ -6,6 +6,7 @@
               v-bind:burger="burger" 
               v-bind:key="burger.name"/>
     </div>
+      Namn: <input type="text" v-model="namn">
     <div id="map" v-on:click="addOrder">
       click here
     </div>
@@ -28,7 +29,8 @@ export default {
       burgers: [ {name: "small burger", kCal: 250},
                  {name: "standard burger", kCal: 450},
                  {name: "large burger", kCal: 850}
-               ]
+               ],
+      Namn: "hejhej",
     }
   },
   methods: {
