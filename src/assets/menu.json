@@ -1,0 +1,28 @@
+[
+    {
+        "name": "Umami Bacon Burger,",
+        "price": "109 Kr",
+        "kCal": 788,
+        "lactose": true,
+        "gluten": true,
+        "img": "https://www.max.se/contentassets/297c9781f4e34318ab63df3535fa1561/product_gdl-umami-bacon-burger2.png?width=668&height=622&sharpen=5&sigma=1,4&threshold=0"
+    },
+
+    {
+        "name": "Cheeseburger,",
+        "price": "16 Kr",
+        "kCal": 317,
+        "lactose": true,
+        "gluten": true,
+        "img": "https://www.max.se/contentassets/2c64a1d06cc64c9284fbfbca16d37f59/product_cheeseburgare.png?width=1160&sharpen=5&sigma=1,4&threshold=0" 
+    },
+
+    {
+        "name": "Salad Wrap Burger,",
+        "price": "89 Kr",
+        "kCal": 538,
+        "lactose": true,
+        "gluten": true,
+        "img": "https://www.max.se/contentassets/a8b6e8662e6d4a2ba06592874b6e5c13/product_salad-wrap-burgare.png?width=668&height=622&sharpen=5&sigma=1,4&threshold=0"
+    }
+  ]
