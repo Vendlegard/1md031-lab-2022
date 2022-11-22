@@ -53,10 +53,10 @@ Your OneBurger.vue component:
 - [x] ... only displays allergy information if relevant (either only if it contains gluten or lactose, or only if it's gluten or lactose free)
 
 Your Dispatcher.vue file:
-- [ ] ... shows for every order :
-    - [ ] a location on the map
-    - [ ] the order information
-    - [ ] the customer information
+- [x] ... shows for every order :
+    - [x] a location on the map
+    - [x] the order information
+    - [x] the customer information
 
 ## Optional
 - [ ] Only allow the order to be sent if all necessary information are provided

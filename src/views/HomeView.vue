@@ -21,11 +21,11 @@
       
         </section>
 
-        <section class="contact">
+        <section class="contact" id="bodyText">
             <h3>Customer information</h3>
             <p>Don't forget to follow us on social media.</p>
 
-            <h4>Delivery information</h4>
+            <h3>Delivery information</h3>
             <form>
                 <p>
                     <label for="Full name">Full name</label><br>
@@ -35,15 +35,16 @@
                     <label for="email">E-mail</label><br>
                     <input type="email" id="email" v-model="em" placeholder="Email-adress">
                 </p>
-                <p>
-                    <label for="street">Street</label><br>
-                    <input type="text" id="street" v-model="st" required="required" placeholder="Street name">
-                </p>
-                <p>
-                    <label for="house">House</label><br>
-                    <input type="text" id="house" v-model="he" required="required" placeholder="House number">
-                </p>
-
+                <!--
+                  <p>
+                      <label for="street">Street</label><br>
+                      <input type="text" id="street" v-model="st" required="required" placeholder="Street name">
+                  </p>
+                  <p>
+                      <label for="house">House</label><br>
+                      <input type="text" id="house" v-model="he" required="required" placeholder="House number">
+                  </p>
+                -->
                 <p>
                     <label for="payment">Payment method</label><br>
                     <select id="payment" v-model="pm">
@@ -72,29 +73,30 @@
                     <label for="undisclosed">Undisclosed</label>
                  </p>
             </form>
+
+            <h4> Please mark your address below:</h4>
+
+            <div id="sizeMap">
+               <div id="map" v-on:click="addOrder">
+                  <div v-bind:style="{ left: location.x + 'px', top: location.y + 'px'}">
+                   T
+                  </div>
+                </div>
+            </div>
+
+            <div>
+              <button class="btnOrder" id ="btnOrder" v-on:click="printOrder" type="submit" >
+               <img src="https://png.pngitem.com/pimgs/s/160-1604188_hamburger-letters-png-burger-and-fries-icon-transparent.png"
+               width = "25" height = "25">
+               Place your order
+             </button>
+            </div>
         </section>
      </main>
 
-     <div v-on:click="printOrder">
-          <button class="btnOrder" id ="btnOrder" type="submit" v-on:click="printOrder">
-          <img src="https://png.pngitem.com/pimgs/s/160-1604188_hamburger-letters-png-burger-and-fries-icon-transparent.png"
-            width = "25" height = "25">
-          Order here
-          </button>
-      </div>
-
-      <div id="sizeMap">
-        <div id="map" v-on:click="addOrder">
-  
-          <div v-for="(order, key) in orders" v-bind:style="{ left: order.details.x + 'px', top: order.details.y + 'px'}" v-bind:key="'dots' + key">
-            {{ key }}
-          </div>a
-        </div>
-      </div>
-
      <hr>
      <footer>
-        &COPY; 2022 Burger Store AB
+        &COPY; 2022 Burger Store AB by Emil Vendlegård
      </footer>
   </div>
 </template>
@@ -130,6 +132,7 @@ export default {
   components: {
     Burger
   },
+
   data: function () {
     return {
       // burgers: [ {name: "small burger", kCal: 250},
@@ -137,8 +140,14 @@ export default {
       //            {name: "large burger", kCal: 850}
       //          ]
          burgers: menu,
+         fn: '',
+         em: '',
+         pm: '',
+         gender: '',
 
-         orderedBurger:{}
+         orderedBurger:{},
+
+         location: {x: 0, y: 0}
     }
   },
   methods: {
@@ -148,20 +157,36 @@ export default {
     addOrder: function (event) {
       var offset = {x: event.currentTarget.getBoundingClientRect().left,
                     y: event.currentTarget.getBoundingClientRect().top};
-      socket.emit("addOrder", { orderId: this.getOrderNumber(),
-                                details: { x: event.clientX - 10 - offset.x,
-                                           y: event.clientY - 10 - offset.y },
-                                orderItems: ["Beans", "Curry"]
-                              }
-                 );
+      // socket.emit("addOrder", { orderId: this.getOrderNumber(),
+      //                           details: { x: event.clientX - 10 - offset.x,
+      //                                      y: event.clientY - 10 - offset.y },
+      //                           orderItems: ["Beans", "Curry"]
+      //                         }
+      //            );
+                 this.location.x=event.clientX - 10 - offset.x;
+                 this.location.y=event.clientY -10 - offset.y;
     },
+
     printOrder: function(){
-      console.log(this.fn, this.em, this.st, this.he, this.pm, this.gender);
+      console.log(this.fn, this.em, this.pm, this.gender);
       console.log(this.orderedBurger);
+
+      socket.emit("addOrder", {orderId: this.getOrderNumber(),
+        details:{
+          x: this.location.x,
+          y: this.location.y
+        },
+        orderItems: this.orderedBurger,
+        customerInformation: [this.fn, this.em, this.pm, this.gender]
+      });
     },
     addToOrder: function (event) {
      this.orderedBurger[event.name] = event.amount;
 
+    },
+    setLocation: function(event){
+     this.location.x=event.clientX - 10 - event.currentTarget.getBoundingClientRect().left;
+     this.location.y=event.clientY - 10 - event.currentTarget.getBoundingClientRect().top;
     }
   }
 }
@@ -233,7 +258,7 @@ export default {
 
  .contact{
    width: 100%;
-   padding-left: 15px;
+   
  }
 
 #sizeMap{
@@ -243,11 +268,24 @@ export default {
 }
 
 #map {
+  position: relative;
   width: 1920px;
   height: 1078px;
   background: url("C:/Users/emilv/OneDrive/Skrivbord/Repositories/1md031-lab-2022/public/img/polacks.jpg");
   cursor: pointer;
 }
+
+#map div{
+    position: absolute;
+    background: black;
+    color: white;
+    border-radius: 10px;
+    width:20px;
+    height:20px;
+    text-align: center;
+    margin: 0px;
+    padding: 0px;
+  }
 
 .wrapper {
   display: grid;
